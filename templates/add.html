@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Add Model</title>
+</head>
+<body>
+    <p class="m-3">Add the Model (I didn't focus much on styling)</p>
+    <a href="/admin/testapp/article" class="m-3 text-blue-600 hover:uppercase hover:bg-black p-3 hover:text-white">&larr; Go Back</a>
+    <form action="{{url}}" method="post" id="myform" onsubmit="submitHandler(event)">
+        {% csrf_token %}
+        <div class="flex flex-col items-center justify-center m-10">
+            <!-- <a class="m-3 cursor-pointer"><i class="fa fa-plus"></i> Add another language</a> -->
+            
+            {% for key in choices %}
+                <div id="div-{{key}}" class="flex justify-center items-center">
+                    <label class="block m-3" for="title{{forloop.counter}}">Article title ({{key}}):</label>
+                    <input class="block border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" 
+                        type="text" name="{{key}}" id="title{{forloop.counter}}" value="{{value}}" />
+                    <!-- <span class="m-3 border border-slate-400 p-2 cursor-pointer" id="{{key}}" onclick="deleteLanguage(this.id)">
+                        <a href="#"><i class="fa fa-trash-o fa-fw"></i> Delete in every model</a>
+                    </span> -->
+                </div>
+            {% endfor %}
+            <div class="flex justify-center items-center m-3">
+                <label>Default language: </label>
+                <select id="default" name="default" class="border border-gray-300 text-gray-900 text-sm m-1 rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                    <option value="" selected disabled><i class="fa fa-plus"></i> Add default language</option>
+                    <!-- <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="mercedes">Mercedes</option>
+                        <option value="audi">Audi</option> -->
+                        {% for i in choices %}
+                            <option value="{{i}}">{{i}}</option>
+                        {% endfor %}
+                </select>
+            </div>
+            <p class="text-red-600 hidden" id="hidden">Select a default value to add the model</p>    
+            <input type="submit" class="border btn bg-black text-white p-3 my-2 cursor-pointer hover:text-blue-600 hover:uppercase hover:bg-white hover:border-gray-500" value="Add New Model">
+        </div>
+    </form>
+    <script>
+        const submitHandler = (e) =>{
+            e.preventDefault()
+            const obj = document.getElementById('default');
+            if(obj.value == ""){
+                const hiddenObj = document.getElementById('hidden');
+                hiddenObj.style.display = 'block'
+            }else{
+                document.getElementById('myform').submit()
+            }
+        }
+    </script>
+</body>
+</html>
